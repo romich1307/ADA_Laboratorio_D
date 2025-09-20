@@ -12,6 +12,7 @@
 using namespace std;
 using namespace std::chrono;
 
+// Función para el algoritmo de Selection Sort
 void selectionSort(vector<float>& lista, int& comparaciones, int& intercambios) {
     int n = lista.size();
     comparaciones = 0;
@@ -35,25 +36,58 @@ void selectionSort(vector<float>& lista, int& comparaciones, int& intercambios) 
     }
 }
 
-// Se generara un vector de acuerdo al tamano de datos
+// Función para el algoritmo de Insertion Sort
+void insertionSort(vector<float>& lista, int& comparaciones, int& intercambios) {
+    int n = lista.size();
+    comparaciones = 0;
+    intercambios = 0;
+
+    for (int i = 1; i < n; i++) {
+        float clave = lista[i];
+        int j = i - 1;
+
+        // Mover los elementos que son mayores que clave a una posición adelante
+        while (j >= 0 && lista[j] > clave) {
+            lista[j + 1] = lista[j];
+            j--;
+            comparaciones++;
+            intercambios++;
+        }
+        lista[j + 1] = clave; // Insertar el elemento en su lugar adecuado
+        comparaciones++; // Se hace una comparación al final
+    }
+}
+
+// Se generará un vector de acuerdo al tamaño de datos
 vector<float> generarVectorAleatorio(int tamaño) {
     vector<float> vec(tamaño);
     random_device rd;
     mt19937 generador(rd());
     uniform_real_distribution<float> rango(1.0f, 1000.0f);
     for (int i = 0; i < tamaño; i++) 
-    {vec[i] = rango(generador);}
+    { vec[i] = rango(generador); }
     return vec;
 }
 
-// Se evalua rendimiento
-void evaluarRendimiento(int tamaño) {
-    cout << "\n Con " << tamaño << " elementos \n";
+// Función que recibe arreglo y tipo de ordenamiento
+void eleccionYOrdenamiento(vector<float>& lista, const string& tipoOrdenamiento, int& comparaciones, int& intercambios) {
+    if (tipoOrdenamiento == "selection") {
+        selectionSort(lista, comparaciones, intercambios);
+    } else if (tipoOrdenamiento == "insertion") {
+        insertionSort(lista, comparaciones, intercambios);
+    } else {
+        throw runtime_error("Tipo de ordenamiento no soportado. Usa 'selection' o 'insertion'.");
+    }
+}
+
+// Evaluar rendimiento
+void evaluarRendimiento(int tamaño, const string& tipoOrdenamiento) {
+    cout << "\nCon " << tamaño << " elementos (" << tipoOrdenamiento << ")\n";
     vector<float> lista = generarVectorAleatorio(tamaño);
     int comparaciones = 0, intercambios = 0;
 
     auto inicio = steady_clock::now();
-    selectionSort(lista, comparaciones, intercambios);
+    eleccionYOrdenamiento(lista, tipoOrdenamiento, comparaciones, intercambios);
     auto fin = steady_clock::now();
 
     auto tiempo = duration_cast<microseconds>(fin - inicio).count();
@@ -62,30 +96,27 @@ void evaluarRendimiento(int tamaño) {
     cout << "Intercambios: " << intercambios << "\n";
 }
 
-// Recibe arreglo y tipo de ordenamiento
-void eleccionYOrdenamiento(vector<float>& lista,const string& tipoOrdenamiento,int& comparaciones,int& intercambios) {
-    if (tipoOrdenamiento == "selection") {
-        selectionSort(lista, comparaciones, intercambios);
-    } else {
-        throw runtime_error("Tipo de ordenamiento no soportado. Usa 'selection'.");
-    }
-}
-
 int main() {
-    cout << "EVALUACION DE RENDIMIENTO - SELECTION SORT \n";
-    evaluarRendimiento(1000);
-    evaluarRendimiento(5000);
-    evaluarRendimiento(10000);
+    // Evaluación de rendimiento para ambos tipos de ordenamiento
+    cout << "EVALUACION DE RENDIMIENTO - SELECTION Y INSERTION SORT\n";
+    evaluarRendimiento(1000, "selection");
+    evaluarRendimiento(5000, "selection");
+    evaluarRendimiento(10000, "selection");
+
+    evaluarRendimiento(1000, "insertion");
+    evaluarRendimiento(5000, "insertion");
+    evaluarRendimiento(10000, "insertion");
 
     cout << "\nPRUEBA \n";
     cout << "Ingrese el tamaño del arreglo a ordenar: ";
-    int n;  cin >> n;
+    int n;  
+    cin >> n;
 
     vector<float> lista(n);
     cout << "Ingrese los elementos del arreglo:\n";
     for (int i = 0; i < n; i++) cin >> lista[i];
 
-    string tipo = "selection"; 
+    string tipo = "insertion";  // Puedes cambiar a "selection" si lo prefieres
     int comparaciones = 0, intercambios = 0;
 
     cout << "\nLista original: [ ";

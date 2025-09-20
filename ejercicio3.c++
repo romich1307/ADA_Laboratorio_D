@@ -32,4 +32,10 @@ void selectionSort(vector<float>& lista, int& comparaciones, int& intercambios) 
     }
 }
 
-
+void eleccionYOrdenamiento(vector<float>& lista, string tipoOrdenamiento) {
+    if (tipoOrdenamiento == "selectionSort") {
+        selectionSort(lista, comparaciones, intercambios);
+    } else {
+        cout << "Tipo de ordenamiento no soportado." << endl;
+    }
+}

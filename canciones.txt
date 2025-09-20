@@ -1,0 +1,8 @@
+1,Bohemian Rhapsody,355
+2,Stairway to Heaven,482
+3,Imagine,183
+4,Hotel California,391
+5,Sweet Child O Mine,356
+6,Smells Like Teen Spirit,301
+7,Yesterday,125
+8,Let It Be,243

@@ -29,7 +29,19 @@ void selectionSort(vector<float>& lista, int& comparaciones, int& intercambios) 
 }
 
 int main() {
-    vector<float> lista = {5.2, 4.1, 4.8, 3.3, 2.7};
+
+
+    cout<<"Implementacion del algoritmo Selection Sort"<<endl;
+    cout<<"Ingrese el tamano del arreglo a ordenar: "<<endl;
+    int n;  
+    cin>>n;
+    cout<<"Ingrese los elementos del arreglo: "<<endl;
+    vector<float> lista(n);
+    for(int i=0; i<n; i++){
+        cin>>lista[i];
+    }
+
+    vector<float> lista1 = {5.2, 4.1, 4.8, 3.3, 2.7};
     int comparaciones, intercambios;
 
     cout << "Lista original: [ ";

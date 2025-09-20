@@ -1,0 +1,51 @@
+id,titulo,puntaje
+SNG001,Bohemian Rhapsody,9.8
+SNG002,Billie Jean,9.6
+SNG003,Let It Be,9.4
+SNG004,Rolling in the Deep,9.1
+SNG005,Shape of You,8.7
+SNG006,Viva La Vida,8.9
+SNG007,Levitating,8.4
+SNG008,Uptown Funk,9.0
+SNG009,Bad Romance,8.6
+SNG010,Shake It Off,8.2
+SNG011,Blinding Lights,9.3
+SNG012,Believer,8.5
+SNG013,In the End,9.0
+SNG014,Smells Like Teen Spirit,9.2
+SNG015,Wonderwall,8.8
+SNG016,Californication,8.9
+SNG017,Livin' on a Prayer,8.8
+SNG018,Sweet Child O' Mine,9.1
+SNG019,Nothing Else Matters,9.0
+SNG020,Thunderstruck,8.7
+SNG021,Despacito,8.3
+SNG022,Tití Me Preguntó,8.0
+SNG023,PROVENZA,8.1
+SNG024,Hips Don't Lie,8.4
+SNG025,DESPECHÁ,8.0
+SNG026,Todo de Ti,8.2
+SNG027,Mi Gente,8.1
+SNG028,Felices los 4,7.8
+SNG029,Tacones Rojos,8.0
+SNG030,Cómo Te Atreves,7.9
+SNG031,Todo Cambió,8.0
+SNG032,Me Niego,7.9
+SNG033,Entra en Mi Vida,8.1
+SNG034,Corazón Partío,8.6
+SNG035,La Incondicional,8.7
+SNG036,Burbujas de Amor,8.2
+SNG037,Vivir Mi Vida,8.3
+SNG038,La Bicicleta,8.0
+SNG039,Bailando,8.1
+SNG040,Torero,7.9
+SNG041,De Música Ligera,9.0
+SNG042,Rayando el Sol,8.5
+SNG043,Eres,8.3
+SNG044,Matador,8.4
+SNG045,Lamento Boliviano,8.6
+SNG046,Gasolina,8.2
+SNG047,Danza Kuduro,8.3
+SNG048,Pepas,8.0
+SNG049,Dance Monkey,8.1
+SNG050,Yellow,8.7

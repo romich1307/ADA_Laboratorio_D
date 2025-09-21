@@ -31,9 +31,14 @@ void imprimirLista(const vector<string>& lista) {
 }
 
 int main() {
-    // Caso 1: Lista ya ordenada
-    vector<string> listaOrdenada = {"Ana", "Carlos", "David", "Eva", "Laura"};
-    cout << "Lista ya ordenada:" << endl;
+    // Caso 1: Lista ya ordenada (más larga para ver diferencias)
+    vector<string> listaOrdenada = {
+        "Ana", "Beatriz", "Carlos", "Diana", "Eduardo", "Fernanda", "Gabriel", 
+        "Helena", "Ignacio", "Julia", "Kevin", "Laura", "Mario", "Natalia", 
+        "Oscar", "Patricia", "Quinto", "Rosa", "Santiago", "Teresa", 
+        "Ulises", "Valeria", "Walter", "Ximena", "Yamil", "Zoe"
+    };
+    cout << "Lista ya ordenada (" << listaOrdenada.size() << " elementos):" << endl;
     imprimirLista(listaOrdenada);
 
     // Medir el tiempo de ejecución para lista ordenada
@@ -42,12 +47,17 @@ int main() {
     auto fin = high_resolution_clock::now();
     cout << "Lista ordenada usando Insertion Sort:" << endl;
     imprimirLista(listaOrdenada);
-    auto duracion = duration_cast<microseconds>(fin - inicio); // Convertir a microsegundos
+    auto duracion = duration_cast<microseconds>(fin - inicio);
     cout << "Tiempo de ejecución para lista ordenada: " << duracion.count() << " microsegundos" << endl;
 
-    // Caso 2: Lista en orden inverso
-    vector<string> listaInvertida = {"Laura", "Eva", "David", "Carlos", "Ana"};
-    cout << "\nLista en orden inverso:" << endl;
+    // Caso 2: Lista en orden inverso (más larga)
+    vector<string> listaInvertida = {
+        "Zoe", "Yamil", "Ximena", "Walter", "Valeria", "Ulises", "Teresa", 
+        "Santiago", "Rosa", "Quinto", "Patricia", "Oscar", "Natalia", "Mario", 
+        "Laura", "Kevin", "Julia", "Ignacio", "Helena", "Gabriel", 
+        "Fernanda", "Eduardo", "Diana", "Carlos", "Beatriz", "Ana"
+    };
+    cout << "\nLista en orden inverso (" << listaInvertida.size() << " elementos):" << endl;
     imprimirLista(listaInvertida);
 
     // Medir el tiempo de ejecución para lista inversa
@@ -59,9 +69,14 @@ int main() {
     duracion = duration_cast<microseconds>(fin - inicio);
     cout << "Tiempo de ejecución para lista en orden inverso: " << duracion.count() << " microsegundos" << endl;
 
-    // Caso 3: Lista aleatoria
-    vector<string> listaAleatoria = {"Eva", "Carlos", "Ana", "Laura", "David"};
-    cout << "\nLista aleatoria:" << endl;
+    // Caso 3: Lista aleatoria (más larga)
+    vector<string> listaAleatoria = {
+        "Mario", "Ana", "Ximena", "Eduardo", "Rosa", "Kevin", "Beatriz", 
+        "Walter", "Julia", "Santiago", "Patricia", "Ignacio", "Zoe", "Carlos", 
+        "Valeria", "Oscar", "Helena", "Quinto", "Fernanda", "Yamil", 
+        "Diana", "Ulises", "Teresa", "Gabriel", "Laura", "Natalia"
+    };
+    cout << "\nLista aleatoria (" << listaAleatoria.size() << " elementos):" << endl;
     imprimirLista(listaAleatoria);
 
     // Medir el tiempo de ejecución para lista aleatoria

@@ -62,6 +62,47 @@ void mergeSort(vector<string>& a){
     mergeSortRec(a,aux,0,(int)a.size());
 }
 
+// ---------- QuickSort ----------
+static int particion(vector<string>& a, int bajo, int alto){
+    string pivote = a[alto];             // último elemento como pivote
+    int i = bajo - 1;                    // índice del menor
+    for(int j = bajo; j < alto; j++){
+        if(a[j] <= pivote){              // elemento menor o igual al pivote
+            i++;
+            swap(a[i], a[j]);            // intercambio
+        }
+    }
+    swap(a[i+1], a[alto]);               // coloca pivote en posición correcta
+    return i + 1;
+}
+static void quickSortRec(vector<string>& a, int bajo, int alto){
+    if(bajo < alto){
+        int pi = particion(a, bajo, alto); // índice de partición
+        quickSortRec(a, bajo, pi - 1);     // ordena antes del pivote
+        quickSortRec(a, pi + 1, alto);     // ordena después del pivote
+    }
+}
+void quickSort(vector<string>& a){
+    if(a.size()<2) return;
+    quickSortRec(a, 0, (int)a.size()-1);
+}
+
+// ---------- Selection Sort ----------
+void selectionSort(vector<string>& a){
+    int n = (int)a.size();
+    for(int i = 0; i < n-1; i++){
+        int indiceMinimo = i;            // busca el mínimo
+        for(int j = i+1; j < n; j++){
+            if(a[j] < a[indiceMinimo]){
+                indiceMinimo = j;
+            }
+        }
+        if(indiceMinimo != i){           // intercambia si es necesario
+            swap(a[i], a[indiceMinimo]);
+        }
+    }
+}
+
 // ---------- benchmark sencillo ----------
 template<typename F>
 pair<long long,bool> bench(const vector<string>& base, F sorter){
@@ -81,12 +122,16 @@ int main(){
     auto base = makeRandomStrings(N);                // datos iguales para ambos
 
     auto [us_merge,  ok_merge ] = bench(base, [](auto& v){ mergeSort(v); });
+    auto [us_quick,  ok_quick ] = bench(base, [](auto& v){ quickSort(v); });
     auto [us_insert, ok_insert] = bench(base, [](auto& v){ ordenamientoPorInsercion(v); });
+    auto [us_select, ok_select] = bench(base, [](auto& v){ selectionSort(v); });
 
     cout << "n = " << N << " strings aleatorios\n\n";
     cout << left << setw(16) << "Algoritmo" << setw(14) << "Tiempo (us)" << "OK\n";
     cout << "---------------------------------------\n";
     cout << left << setw(16) << "MergeSort"     << setw(14) << us_merge  << (ok_merge ?"si":"NO")  << "\n";
+    cout << left << setw(16) << "QuickSort"     << setw(14) << us_quick  << (ok_quick ?"si":"NO")  << "\n";
     cout << left << setw(16) << "InsertionSort" << setw(14) << us_insert << (ok_insert?"si":"NO")  << "\n";
+    cout << left << setw(16) << "SelectionSort" << setw(14) << us_select << (ok_select?"si":"NO")  << "\n";
     return 0;
 }

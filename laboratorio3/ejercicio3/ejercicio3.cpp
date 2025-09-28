@@ -27,6 +27,29 @@ void mergeSort(int arr[], int l, int r) {
     merge(arr, l, m, r);                     // mezcla
 }
 
+// partition: partición para quickSort
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];                   // pivote
+    int i = low - 1;                         // índice menor
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(arr[i], arr[j]);            // intercambio
+        }
+    }
+    swap(arr[i + 1], arr[high]);             // pivote en posición
+    return i + 1;
+}
+
+// quickSort: ordena por división
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);  // partición
+        quickSort(arr, low, pi - 1);         // izq
+        quickSort(arr, pi + 1, high);        // der
+    }
+}
+
 // binarySearch: busca target en arr asc
 int binarySearch(const int arr[], int n, int target) {
     int lo = 0, hi = n - 1;                  // rangos
@@ -39,39 +62,81 @@ int binarySearch(const int arr[], int n, int target) {
     return -1;                               // no está
 }
 
+// sequentialSearch: busca target en arr original (sin ordenar)
+int sequentialSearch(const int arr[], int n, int target) {
+    for (int i = 0; i < n; ++i) {
+        if (arr[i] == target) return i;      // hallado
+    }
+    return -1;                               // no está
+}
+
 int main() {
     ios::sync_with_stdio(false); cin.tie(nullptr);
 
-    int n; cout << "n: ";
-    if (!(cin >> n) || n < 0) { cerr << "invalido\n"; return 1; }
+    cout << "=== ORDENAMIENTO Y BUSQUEDA ===" << endl;
+    cout << "MergeSort/QuickSort + Busqueda Binaria vs Busqueda Secuencial" << endl;
+    cout << "===============================================" << endl << endl;
+    
+    int n;
+    cout << "Ingrese el tamano del arreglo (n): ";
+    cout.flush(); 
+    if (!(cin >> n) || n < 0) { cerr << "Numero invalido\n"; return 1; }
 
     int* a = new int[n];                     // arreglo
+    int* original = new int[n];              // copia original
     cout << "Ingresa " << n << " enteros:\n";
+    cout.flush(); 
     for (int i = 0; i < n; ++i) {
         while (!(cin >> a[i])) {             // valida
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Reintenta: ";
         }
+        original[i] = a[i];                  // guarda original
     }
 
-    if (n > 1) mergeSort(a, 0, n - 1);       // ordenar
+    // Elegir algoritmo de ordenamiento
+    int choice;
+    cout << "\n--- SELECCION DE ALGORITMO ---" << endl;
+    cout << "1. MergeSort  " << endl;
+    cout << "2. QuickSort  " << endl;
+    cout << "Elija opcion (1 o 2): ";
+    cout.flush(); // Forzar salida inmediata
+    cin >> choice;
 
-    cout << "\nOrdenado: ";
+    if (choice == 1) {
+        if (n > 1) mergeSort(a, 0, n - 1);       // ordenar con merge
+        cout << "Aplicando MergeSort..." << endl;
+    } else {
+        if (n > 1) quickSort(a, 0, n - 1);      // ordenar con quick
+        cout << "Aplicando QuickSort..." << endl;
+    }
+
+    cout << "\n--- ARREGLO ORDENADO ---" << endl;
+    cout << "Resultado: ";
     for (int i = 0; i < n; ++i)              // print
         cout << a[i] << (i + 1 < n ? ' ' : '\n');
 
-    int x; cout << "\nBuscar: ";
+    int x; cout << "\n--- BUSQUEDA ---" << endl;
+    cout << "Ingrese elemento a buscar: ";
+    cout.flush(); // Forzar salida inmediata
     while (!(cin >> x)) {                    // valida
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "Reintenta: ";
     }
 
+    cout << "\n--- RESULTADOS ---" << endl;
     int idx = binarySearch(a, n, x);         // buscar
-    if (idx != -1) cout << "Encontrado en " << idx << "\n";
-    else           cout << "No encontrado\n";
+    cout << "Busqueda Binaria (en arreglo ordenado): ";
+    if (idx != -1) cout << "Encontrado en posicion " << idx << endl;
+    else           cout << "No encontrado" << endl;
 
-    // Nota rápida: MergeSort O(n log n), Binary O(log n); total ~ O(n log n). Secuencial sin ordenar O(n).
-    delete[] a; return 0;
+    // Comparación con búsqueda secuencial
+    int seqIdx = sequentialSearch(original, n, x);
+    cout << "Busqueda Secuencial (arreglo original): ";
+    if (seqIdx != -1) cout << "Encontrado en posicion " << seqIdx << endl;
+    else              cout << "No encontrado" << endl;
+
+    delete[] a; delete[] original; return 0;
 }

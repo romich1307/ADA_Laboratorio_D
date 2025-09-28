@@ -93,6 +93,32 @@ static void mergeSortByPriceDesc(vector<Product>& a) {
     mergeSortRec(a, aux, 0, (int)a.size());
 }
 
+// =================== QUICKSORT (desc por precio) ===================
+static int partitionByPriceDesc(vector<Product>& a, int bajo, int alto) {
+    double pivote = a[alto].price;           // precio del último elemento
+    int i = bajo - 1;                        // índice del menor
+    for (int j = bajo; j < alto; j++) {
+        // mayor o igual al pivote para orden descendente
+        if (a[j].price >= pivote) {
+            i++;
+            swap(a[i], a[j]);                // intercambio
+        }
+    }
+    swap(a[i + 1], a[alto]);                 // coloca pivote en posición correcta
+    return i + 1;
+}
+static void quickSortRec(vector<Product>& a, int bajo, int alto) {
+    if (bajo < alto) {
+        int pi = partitionByPriceDesc(a, bajo, alto);  // índice de partición
+        quickSortRec(a, bajo, pi - 1);               // ordena antes del pivote
+        quickSortRec(a, pi + 1, alto);               // ordena después del pivote
+    }
+}
+static void quickSortByPriceDesc(vector<Product>& a) {
+    if (a.size() < 2) return;
+    quickSortRec(a, 0, (int)a.size() - 1);
+}
+
 // -------- Impresión --------
 static void printProducts(const vector<Product>& v) {
     cout << left << setw(12) << "Codigo" << " | "
@@ -127,12 +153,24 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    // Ordenar DESC por precio con MergeSort
-    mergeSortByPriceDesc(items);
+    // Hacer copia para probar ambos algoritmos
+    vector<Product> itemsMerge = items;
+    vector<Product> itemsQuick = items;
 
-    // Mostrar
+    // Ordenar DESC por precio con MergeSort
+    mergeSortByPriceDesc(itemsMerge);
+
+    // Ordenar DESC por precio con QuickSort
+    quickSortByPriceDesc(itemsQuick);
+
+    // Mostrar resultados
     cout << "Productos ordenados (precio DESC) usando MergeSort:\n";
-    printProducts(items);
+    printProducts(itemsMerge);
+
+    cout << "\n" << string(60, '=') << "\n\n";
+
+    cout << "Productos ordenados (precio DESC) usando QuickSort:\n";
+    printProducts(itemsQuick);
 
     return 0;
 }

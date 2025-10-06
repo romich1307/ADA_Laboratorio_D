@@ -1,25 +1,25 @@
-#Implementa	Prim	y	Kruskal	para	un	grafo	con	6	vértices	y	
-# 10	aristas	aleatorias	y	compara	el	
-#número	de	aristas	procesadas	por	cada	algoritmo	
-# (El	algoritmo	de	Prim	comienzenlo	desde	un	
-#vértice	elegido	por	ustedes).	
-class ciclos:
-    def _init_(objeto,cantidad):
-        objeto.padre=list(range(cantidad))
-        objeto.rango=[1]*cantidad
-    
-    def encontrar(objeto, i):
-        if objeto.padre[i] !=i:
-            objeto.padre[i]=objeto.encontar(objeto.padre[i]) 
-        return objeto.padre[i]
-    def union(objeto,nodo_u,nodo_v):
-        raiz_u=objeto.encontrar(nodo_u)
-        raiz_v=objeto.encontrar(nodo_v)
-        if raiz_u !=raiz_v:
-            if objeto.rango[raiz_u]>objeto.rango[raiz_v]:
-                objeto.padre[raiz_v]=raiz_u
-            elif objeto.rango[raiz_u]<objeto.rango[raiz_v]:
-                objeto.padre[raiz_u]=raiz_v
+
+
+class Ciclos:
+    def __init__(self, cantidad):
+        # cada nodo empieza siendo su propio padre
+        self.padre = list(range(cantidad))
+        # rango (altura aproximada) para union by rank
+        self.rango = [1] * cantidad
+
+    def encontrar(self, i):
+        if self.padre[i] != i:
+            self.padre[i] = self.encontrar(self.padre[i])
+        return self.padre[i]
+
+    def union(self, nodo_u, nodo_v):
+        raiz_u = self.encontrar(nodo_u)
+        raiz_v = self.encontrar(nodo_v)
+        if raiz_u != raiz_v:
+            if self.rango[raiz_u] > self.rango[raiz_v]:
+                self.padre[raiz_v] = raiz_u
+            elif self.rango[raiz_u] < self.rango[raiz_v]:
+                self.padre[raiz_u] = raiz_v
             else:
-                objeto.padre[raiz_v]=raiz_u
-                objeto.rango[raiz_u]+=1
+                self.padre[raiz_v] = raiz_u
+                self.rango[raiz_u] += 1

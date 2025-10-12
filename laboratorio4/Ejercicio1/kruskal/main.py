@@ -1,7 +1,12 @@
 
-from ciclos import Ciclos
-from kruskal import kruskals_mst
-
+if __package__:
+    # cuando se ejecuta como módulo dentro del paquete
+    from .ciclos import Ciclos
+    from .kruskal import kruskals_mst
+else:
+    # cuando se ejecuta directamente: python main.py desde este directorio
+    from ciclos import Ciclos
+    from kruskal import kruskals_mst
 
 def ejemplo():
     # grafo con 4 vértices y algunas aristas
@@ -17,6 +22,7 @@ def ejemplo():
     costo = kruskals_mst(V, aristas)
     print(f"Costo MST ejemplo: {costo}")
 
-
 if __name__ == "__main__":
     ejemplo()
+
+

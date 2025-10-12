@@ -33,26 +33,76 @@ class Grafo:
                 indice_min = v
         return indice_min
 
-    def prim_MST(self):
+    def prim_MST(self, contar_extraidas=False, vertice_inicio=0):
         claves = [sys.maxsize] * self.n_vertices
         padre = [None] * self.n_vertices
-        claves[0] = 0
+        claves[vertice_inicio] = 0
         en_mst = [False] * self.n_vertices
-        padre[0] = -1
+        padre[vertice_inicio] = -1
 
+        extraidas = 0
         for _ in range(self.n_vertices):
             u = self.indice_minimo(claves, en_mst)
             if u == -1:
                 break
             en_mst[u] = True
+            # Contamos cuántas aristas (entradas de frontera) consideramos al actualizar
             for v in range(self.n_vertices):
                 if self.matriz[u][v] > 0 and en_mst[v] == False and claves[v] > self.matriz[u][v]:
                     claves[v] = self.matriz[u][v]
                     padre[v] = u
+                if self.matriz[u][v] > 0:
+                    extraidas += 1
 
         # al terminar construimos la lista de aristas y retornamos junto con el costo
         self.imprimir_MST(padre)
-        return self.obtener_MST(padre)
+        aristas_mst, costo = self.obtener_MST(padre)
+        if contar_extraidas:
+            return aristas_mst, costo, extraidas
+        return aristas_mst, costo
+
+    def prim_MST_heap(self, contar_pops=False, vertice_inicio=0):
+        """Versión de Prim usando un min-heap (heapq).
+
+        Devuelve (aristas, costo) o (aristas, costo, pops) si contar_pops=True.
+        pops cuenta cuántas extracciones (heap pops) se realizaron.
+        """
+        import heapq
+
+        n = self.n_vertices
+        visitado = [False] * n
+        heap = [(0, vertice_inicio, -1)]  # (peso, vertice, padre)
+        mst = []
+        costo = 0
+        pops = 0
+
+        # padres usados solo para impresión si se desea
+        padres = [None] * n
+
+        while heap and len(mst) < n - 1:
+            peso, u, padre = heapq.heappop(heap)
+            pops += 1
+            if visitado[u]:
+                continue
+            visitado[u] = True
+            padres[u] = padre
+            if padre != -1:
+                mst.append((padre, u, peso))
+                costo += peso
+            # push de todos los vecinos no visitados
+            for v in range(n):
+                w = self.matriz[u][v]
+                if w > 0 and not visitado[v]:
+                    heapq.heappush(heap, (w, v, u))
+
+        # imprimir resultado similar a imprimir_MST
+        print("Arista \tPeso")
+        for u, v, w in mst:
+            print(f"{u} - {v}    {w}")
+
+        if contar_pops:
+            return mst, costo, pops
+        return mst, costo
 
 
 def ejemplo():

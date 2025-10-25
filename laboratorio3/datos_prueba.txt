@@ -1,0 +1,10 @@
+3
+EST001
+Juan Pérez
+15.75
+EST002
+María García
+18.20
+EST003
+Carlos López
+12.50

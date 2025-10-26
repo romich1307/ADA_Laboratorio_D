@@ -5,6 +5,7 @@
 #include <climits>
 #include <iomanip>
 #include <algorithm>
+#include <queue>
 
 using namespace std;
 using namespace chrono;
@@ -79,7 +80,7 @@ void mostrarMatrizSimple(const vector<vector<int>>& matriz, const string& titulo
         cout << " " << indiceLetter(i) << " | ";
         for (int j = 0; j < (int)matriz.size(); j++) {
             if (matriz[i][j] == INFINITO) {
-                cout << setw(4) << "∞" << "  ";
+                cout << setw(4) << "INF" << "  ";
             } else {
                 cout << setw(4) << matriz[i][j] << "  ";
             }
@@ -111,8 +112,8 @@ pair<long long, vector<vector<int>>> floydWarshall(Grafo& g) {
     
     // Mostrar estado inicial para grafos pequeños
     if (n <= 8) {
-        cout << "\n=== FLOYD-WARSHALL: ESTADO INICIAL ===\n";
-        mostrarMatrizSimple(dist, "MATRIZ DE DISTANCIAS INICIAL:");
+    cout << "\n=== FLOYD-WARSHALL: ESTADO INICIAL ===\n";
+    mostrarMatrizSimple(dist, "MATRIZ DE DISTANCIAS INICIAL:");
     }
     
     // Algoritmo Floyd-Warshall principal
@@ -134,14 +135,14 @@ pair<long long, vector<vector<int>>> floydWarshall(Grafo& g) {
         
         // Mostrar progreso para grafos pequeños
         if (n <= 8 && hubo_cambios) {
-            cout << "Iteración k=" << indiceLetter(k) << " - Se encontraron mejoras\n";
+            cout << "Iteracion k=" << indiceLetter(k) << " - Se encontraron mejoras\n";
         }
     }
     
     // Mostrar resultado final para grafos pequeños
     if (n <= 8) {
-        cout << "\n=== FLOYD-WARSHALL: RESULTADO FINAL ===\n";
-        mostrarMatrizSimple(dist, "MATRIZ DE DISTANCIAS MÍNIMAS FINAL:");
+    cout << "\n=== FLOYD-WARSHALL: RESULTADO FINAL ===\n";
+    mostrarMatrizSimple(dist, "MATRIZ DE DISTANCIAS MINIMAS FINAL:");
     }
     
     auto fin = high_resolution_clock::now();
@@ -158,19 +159,24 @@ pair<long long, vector<int>> dijkstra(Grafo& g, int origen) {
     auto inicio = high_resolution_clock::now();
     
     vector<int> dist(g.vertices, INFINITO);
-    
-    // TODO: IMPLEMENTAR ALGORITMO DIJKSTRA AQUÍ
-    // - Usar cola de prioridad (priority_queue)
-    // - Inicializar dist[origen] = 0
-    // - Mientras cola no esté vacía:
-    //   - Extraer vértice con menor distancia
-    //   - Relajar aristas adyacentes
-    // 
-    // NOTA: Este es un algoritmo de camino más corto desde un origen
-    // Complejidad: O((V + E) log V)
-    
+    // Cola de prioridad: (distancia, nodo). Menor distancia primero
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+
     dist[origen] = 0;
-    // IMPLEMENTACIÓN PENDIENTE...
+    pq.push({0, origen});
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();
+        pq.pop();
+        if (d != dist[u]) continue; // Entrada obsoleta
+
+        for (const auto& [v, peso] : g.lista_adyacencia[u]) {
+            if (dist[u] != INFINITO && dist[u] + peso < dist[v]) {
+                dist[v] = dist[u] + peso;
+                pq.push({dist[v], v});
+            }
+        }
+    }
     
     auto fin = high_resolution_clock::now();
     long long tiempo = duration_cast<microseconds>(fin - inicio).count();
@@ -187,18 +193,36 @@ pair<long long, vector<int>> bellmanFord(Grafo& g, int origen) {
     
     vector<int> dist(g.vertices, INFINITO);
     
-    // TODO: IMPLEMENTAR ALGORITMO BELLMAN-FORD AQUÍ
-    // - Inicializar dist[origen] = 0
-    // - Repetir V-1 veces:
-    //   - Para cada arista (u,v) con peso w:
-    //     - Si dist[u] + w < dist[v]: dist[v] = dist[u] + w
-    // - Verificar ciclos negativos (opcional)
-    //
-    // NOTA: Este algoritmo puede manejar pesos negativos
-    // Complejidad: O(V * E)
-    
     dist[origen] = 0;
-    // IMPLEMENTACIÓN PENDIENTE...
+    int V = g.vertices;
+
+    // Relajar todas las aristas V-1 veces
+    for (int i = 0; i < V - 1; ++i) {
+        bool cambio = false;
+        for (int u = 0; u < V; ++u) {
+            if (dist[u] == INFINITO) continue;
+            for (const auto& [v, w] : g.lista_adyacencia[u]) {
+                if (dist[u] + w < dist[v]) {
+                    dist[v] = dist[u] + w;
+                    cambio = true;
+                }
+            }
+        }
+        if (!cambio) break; // Optimización: terminar si no hubo cambios
+    }
+
+    // Detección de ciclo negativo (opcional; no debería ocurrir con pesos positivos)
+    for (int u = 0; u < V; ++u) {
+        if (dist[u] == INFINITO) continue;
+        for (const auto& [v, w] : g.lista_adyacencia[u]) {
+            if (dist[u] + w < dist[v]) {
+                // En presencia de ciclo negativo, dejamos las distancias actuales
+                // (para la comparación de tiempos no afecta) y salimos.
+                u = V; // romper ambos bucles
+                break;
+            }
+        }
+    }
     
     auto fin = high_resolution_clock::now();
     long long tiempo = duration_cast<microseconds>(fin - inicio).count();
@@ -218,64 +242,25 @@ void mostrarComparacion(int vertices, long long tiempo_floyd,
          << setw(15) << tiempo_bellman << "\n";
 }
 
-void analizarComplejidades() {
-    cout << "\n=== ANÁLISIS TEÓRICO DE COMPLEJIDADES ===\n\n";
-    
-    cout << "FLOYD-WARSHALL:\n";
-    cout << "  • Complejidad: O(V³)\n";
-    cout << "  • Ventajas: Encuentra caminos mínimos entre TODOS los pares\n";
-    cout << "  • Desventajas: Muy lento para grafos grandes\n";
-    cout << "  • Uso: Grafos pequeños/medianos, matrices de distancias\n\n";
-    
-    cout << "DIJKSTRA:\n";
-    cout << "  • Complejidad: O((V + E) log V)\n";
-    cout << "  • Ventajas: Muy eficiente, desde un origen a todos\n";
-    cout << "  • Desventajas: NO maneja pesos negativos\n";
-    cout << "  • Uso: Caminos más cortos con pesos positivos\n\n";
-    
-    cout << "BELLMAN-FORD:\n";
-    cout << "  • Complejidad: O(V * E)\n";
-    cout << "  • Ventajas: Maneja pesos negativos, detecta ciclos negativos\n";
-    cout << "  • Desventajas: Más lento que Dijkstra\n";
-    cout << "  • Uso: Grafos con pesos negativos\n\n";
-}
-
-void mostrarRecomendaciones() {
-    cout << "=== RECOMENDACIONES DE USO ===\n\n";
-    cout << " FLOYD-WARSHALL:\n";
-    cout << "   ✓ Usar cuando necesites TODAS las distancias\n";
-    cout << "   ✓ Grafos pequeños (< 500 vértices)\n";
-    cout << "   ✓ Matriz de adyacencia disponible\n\n";
-    
-    cout << " DIJKSTRA:\n";
-    cout << "   ✓ Caminos desde UN origen específico\n";
-    cout << "   ✓ Pesos NO negativos\n";
-    cout << "   ✓ Grafos grandes y eficiencia importante\n\n";
-    
-    cout << " BELLMAN-FORD:\n";
-    cout << "   ✓ Cuando hay pesos negativos\n";
-    cout << "   ✓ Detección de ciclos negativos necesaria\n";
-    cout << "   ✓ Grafos no muy densos\n\n";
-}
 
 // ============================================================================
 // FUNCIÓN PRINCIPAL
 // ============================================================================
 
 int main() {
-    cout << "=== COMPARACIÓN DE ALGORITMOS DE CAMINOS MÍNIMOS ===\n";
+    cout << "=== COMPARACION DE ALGORITMOS DE CAMINOS MINIMOS ===\n";
     cout << "Floyd-Warshall vs Dijkstra vs Bellman-Ford\n\n";
     
-    vector<int> tamaños = {10, 25, 50, 100, 200}; // Tamaños de grafos a probar
+    vector<int> tamanos = {10, 25, 50, 100, 200}; // Tamanos de grafos a probar
     
-    cout << "Probando diferentes tamaños de grafos...\n\n";
-    cout << setw(8) << "Vértices" 
-         << setw(15) << "Floyd-W (μs)" 
-         << setw(15) << "Dijkstra (μs)" 
-         << setw(15) << "Bellman-F (μs)" << "\n";
+    cout << "Probando diferentes tamanos de grafos...\n\n";
+    cout << setw(8) << "Vertices" 
+         << setw(15) << "Floyd-W (us)" 
+         << setw(15) << "Dijkstra (us)" 
+         << setw(15) << "Bellman-F (us)" << "\n";
     cout << string(60, '-') << "\n";
     
-    for (int n : tamaños) {
+    for (int n : tamanos) {
         Grafo g(n);
         g.generarAleatorio(0.3); // 30% de densidad
         
@@ -290,17 +275,7 @@ int main() {
         
         mostrarComparacion(n, tiempo_floyd, tiempo_dijkstra, tiempo_bellman);
     }
-    
-    // Análisis teórico
-    analizarComplejidades();
-    mostrarRecomendaciones();
-    
-    cout << "\n=== NOTAS IMPORTANTES ===\n";
-    cout << "• Los tiempos pueden variar según el hardware\n";
-    cout << "• Floyd-Warshall calcula TODOS los caminos\n";
-    cout << "• Dijkstra y Bellman-Ford calculan desde UN origen\n";
-    cout << "• Para comparación justa, ejecutar Dijkstra V veces\n";
-    cout << "• Densidad del grafo afecta significativamente el rendimiento\n\n";
-    
+
+
     return 0;
 }

@@ -157,10 +157,10 @@ class OptimizadorCisternas:
                             continue
                         if g + m + p == 0:
                             pob_resto, asig_resto = dp(distrito_idx + 1,
-                                                       grandes_usadas,
-                                                       medianas_usadas,
-                                                       pequeñas_usadas,
-                                                       diesel_usado)
+                                                    grandes_usadas,
+                                                    medianas_usadas,
+                                                    pequeñas_usadas,
+                                                    diesel_usado)
                             if pob_resto > mejor_poblacion:
                                 mejor_poblacion = pob_resto
                                 mejor_asignacion = asig_resto

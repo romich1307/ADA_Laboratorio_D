@@ -5,6 +5,10 @@
 #include <climits>
 #include <iomanip>
 #include <algorithm>
+<<<<<<< HEAD
+=======
+#include <queue>
+>>>>>>> bb1d6f62d427410b5287ba6b1d285eef27e9c4a5
 
 using namespace std;
 using namespace chrono;
@@ -79,7 +83,11 @@ void mostrarMatrizSimple(const vector<vector<int>>& matriz, const string& titulo
         cout << " " << indiceLetter(i) << " | ";
         for (int j = 0; j < (int)matriz.size(); j++) {
             if (matriz[i][j] == INFINITO) {
+<<<<<<< HEAD
                 cout << setw(4) << "∞" << "  ";
+=======
+                cout << setw(4) << "INF" << "  ";
+>>>>>>> bb1d6f62d427410b5287ba6b1d285eef27e9c4a5
             } else {
                 cout << setw(4) << matriz[i][j] << "  ";
             }
@@ -111,8 +119,13 @@ pair<long long, vector<vector<int>>> floydWarshall(Grafo& g) {
     
     // Mostrar estado inicial para grafos pequeños
     if (n <= 8) {
+<<<<<<< HEAD
         cout << "\n=== FLOYD-WARSHALL: ESTADO INICIAL ===\n";
         mostrarMatrizSimple(dist, "MATRIZ DE DISTANCIAS INICIAL:");
+=======
+    cout << "\n=== FLOYD-WARSHALL: ESTADO INICIAL ===\n";
+    mostrarMatrizSimple(dist, "MATRIZ DE DISTANCIAS INICIAL:");
+>>>>>>> bb1d6f62d427410b5287ba6b1d285eef27e9c4a5
     }
     
     // Algoritmo Floyd-Warshall principal
@@ -134,14 +147,23 @@ pair<long long, vector<vector<int>>> floydWarshall(Grafo& g) {
         
         // Mostrar progreso para grafos pequeños
         if (n <= 8 && hubo_cambios) {
+<<<<<<< HEAD
             cout << "Iteración k=" << indiceLetter(k) << " - Se encontraron mejoras\n";
+=======
+            cout << "Iteracion k=" << indiceLetter(k) << " - Se encontraron mejoras\n";
+>>>>>>> bb1d6f62d427410b5287ba6b1d285eef27e9c4a5
         }
     }
     
     // Mostrar resultado final para grafos pequeños
     if (n <= 8) {
+<<<<<<< HEAD
         cout << "\n=== FLOYD-WARSHALL: RESULTADO FINAL ===\n";
         mostrarMatrizSimple(dist, "MATRIZ DE DISTANCIAS MÍNIMAS FINAL:");
+=======
+    cout << "\n=== FLOYD-WARSHALL: RESULTADO FINAL ===\n";
+    mostrarMatrizSimple(dist, "MATRIZ DE DISTANCIAS MINIMAS FINAL:");
+>>>>>>> bb1d6f62d427410b5287ba6b1d285eef27e9c4a5
     }
     
     auto fin = high_resolution_clock::now();
@@ -158,6 +180,7 @@ pair<long long, vector<int>> dijkstra(Grafo& g, int origen) {
     auto inicio = high_resolution_clock::now();
     
     vector<int> dist(g.vertices, INFINITO);
+<<<<<<< HEAD
     
     // TODO: IMPLEMENTAR ALGORITMO DIJKSTRA AQUÍ
     // - Usar cola de prioridad (priority_queue)
@@ -171,6 +194,26 @@ pair<long long, vector<int>> dijkstra(Grafo& g, int origen) {
     
     dist[origen] = 0;
     // IMPLEMENTACIÓN PENDIENTE...
+=======
+    // Cola de prioridad: (distancia, nodo). Menor distancia primero
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+
+    dist[origen] = 0;
+    pq.push({0, origen});
+
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();
+        pq.pop();
+        if (d != dist[u]) continue; // Entrada obsoleta
+
+        for (const auto& [v, peso] : g.lista_adyacencia[u]) {
+            if (dist[u] != INFINITO && dist[u] + peso < dist[v]) {
+                dist[v] = dist[u] + peso;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+>>>>>>> bb1d6f62d427410b5287ba6b1d285eef27e9c4a5
     
     auto fin = high_resolution_clock::now();
     long long tiempo = duration_cast<microseconds>(fin - inicio).count();
@@ -187,6 +230,7 @@ pair<long long, vector<int>> bellmanFord(Grafo& g, int origen) {
     
     vector<int> dist(g.vertices, INFINITO);
     
+<<<<<<< HEAD
     // TODO: IMPLEMENTAR ALGORITMO BELLMAN-FORD AQUÍ
     // - Inicializar dist[origen] = 0
     // - Repetir V-1 veces:
@@ -199,6 +243,38 @@ pair<long long, vector<int>> bellmanFord(Grafo& g, int origen) {
     
     dist[origen] = 0;
     // IMPLEMENTACIÓN PENDIENTE...
+=======
+    dist[origen] = 0;
+    int V = g.vertices;
+
+    // Relajar todas las aristas V-1 veces
+    for (int i = 0; i < V - 1; ++i) {
+        bool cambio = false;
+        for (int u = 0; u < V; ++u) {
+            if (dist[u] == INFINITO) continue;
+            for (const auto& [v, w] : g.lista_adyacencia[u]) {
+                if (dist[u] + w < dist[v]) {
+                    dist[v] = dist[u] + w;
+                    cambio = true;
+                }
+            }
+        }
+        if (!cambio) break; // Optimización: terminar si no hubo cambios
+    }
+
+    // Detección de ciclo negativo (opcional; no debería ocurrir con pesos positivos)
+    for (int u = 0; u < V; ++u) {
+        if (dist[u] == INFINITO) continue;
+        for (const auto& [v, w] : g.lista_adyacencia[u]) {
+            if (dist[u] + w < dist[v]) {
+                // En presencia de ciclo negativo, dejamos las distancias actuales
+                // (para la comparación de tiempos no afecta) y salimos.
+                u = V; // romper ambos bucles
+                break;
+            }
+        }
+    }
+>>>>>>> bb1d6f62d427410b5287ba6b1d285eef27e9c4a5
     
     auto fin = high_resolution_clock::now();
     long long tiempo = duration_cast<microseconds>(fin - inicio).count();
@@ -218,6 +294,7 @@ void mostrarComparacion(int vertices, long long tiempo_floyd,
          << setw(15) << tiempo_bellman << "\n";
 }
 
+<<<<<<< HEAD
 void analizarComplejidades() {
     cout << "\n=== ANÁLISIS TEÓRICO DE COMPLEJIDADES ===\n\n";
     
@@ -257,12 +334,15 @@ void mostrarRecomendaciones() {
     cout << "   ✓ Detección de ciclos negativos necesaria\n";
     cout << "   ✓ Grafos no muy densos\n\n";
 }
+=======
+>>>>>>> bb1d6f62d427410b5287ba6b1d285eef27e9c4a5
 
 // ============================================================================
 // FUNCIÓN PRINCIPAL
 // ============================================================================
 
 int main() {
+<<<<<<< HEAD
     cout << "=== COMPARACIÓN DE ALGORITMOS DE CAMINOS MÍNIMOS ===\n";
     cout << "Floyd-Warshall vs Dijkstra vs Bellman-Ford\n\n";
     
@@ -276,6 +356,21 @@ int main() {
     cout << string(60, '-') << "\n";
     
     for (int n : tamaños) {
+=======
+    cout << "=== COMPARACION DE ALGORITMOS DE CAMINOS MINIMOS ===\n";
+    cout << "Floyd-Warshall vs Dijkstra vs Bellman-Ford\n\n";
+    
+    vector<int> tamanos = {10, 25, 50, 100, 200}; // Tamanos de grafos a probar
+    
+    cout << "Probando diferentes tamanos de grafos...\n\n";
+    cout << setw(8) << "Vertices" 
+         << setw(15) << "Floyd-W (us)" 
+         << setw(15) << "Dijkstra (us)" 
+         << setw(15) << "Bellman-F (us)" << "\n";
+    cout << string(60, '-') << "\n";
+    
+    for (int n : tamanos) {
+>>>>>>> bb1d6f62d427410b5287ba6b1d285eef27e9c4a5
         Grafo g(n);
         g.generarAleatorio(0.3); // 30% de densidad
         
@@ -290,6 +385,7 @@ int main() {
         
         mostrarComparacion(n, tiempo_floyd, tiempo_dijkstra, tiempo_bellman);
     }
+<<<<<<< HEAD
     
     // Análisis teórico
     analizarComplejidades();
@@ -302,5 +398,9 @@ int main() {
     cout << "• Para comparación justa, ejecutar Dijkstra V veces\n";
     cout << "• Densidad del grafo afecta significativamente el rendimiento\n\n";
     
+=======
+
+
+>>>>>>> bb1d6f62d427410b5287ba6b1d285eef27e9c4a5
     return 0;
 }

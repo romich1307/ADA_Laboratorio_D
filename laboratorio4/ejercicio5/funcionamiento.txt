@@ -1,0 +1,24 @@
+Ejercicio 5 - Red interna de universidad
+
+Estructura:
+- `entradas/` -> archivos de texto con redes reales simuladas (formato simple)
+- `prim.py` -> implementación de Prim (heap)
+- `kruskal.py` -> implementación de Kruskal
+- `utils.py` -> funciones de lectura y dibujo
+- `main.py` -> procesa todas las entradas en `entradas/` y genera salidas en `salidas_ej5/`
+
+Formato de entrada (archivo .txt):
+- Primera línea: número de nodos n (nodos numerados 0..n-1)
+- Cada línea subsiguiente: u v peso
+
+Ejecutar:
+- Desde la carpeta `laboratorio4/ejercicio5` ejecutar:
+
+  python main.py
+
+Salidas:
+- Para cada entrada se generan dos imágenes: `<entrada>_kruskal.png` y `<entrada>_prim.png` en `salidas_ej5/`.
+
+Sugerencias:
+- Modifica o añade archivos en `entradas/` para representar distintas topologías (aulas, edificios, backbone).
+- Ajusta pesos para representar coste de cableado, latencia o coste económico.

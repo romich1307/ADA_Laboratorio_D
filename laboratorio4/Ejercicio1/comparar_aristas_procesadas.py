@@ -44,8 +44,11 @@ def main():
     for u, v, w in aristas:
         g.matriz[u][v] = w
         g.matriz[v][u] = w
+    # Elegir un vértice de inicio para Prim (según consigna) y mostrarlo
+    vertice_inicio = random.choice(V)
+    print(f"\nVértice inicial elegido para Prim: {vertice_inicio}")
     # Usar la versión con heap para Prim y contar pops (extracciones)
-    aristas_p, costo_p, pops = g.prim_MST_heap(contar_pops=True)
+    aristas_p, costo_p, pops = g.prim_MST_heap(contar_pops=True, vertice_inicio=vertice_inicio)
 
     print(f"\nKruskal: aristas procesadas (inspeccionadas) = {inspeccionadas}, costo = {costo_k}")
     print(f"Prim (heap): extracciones del heap (pops) = {pops}, costo = {costo_p}")

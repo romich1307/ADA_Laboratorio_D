@@ -1,0 +1,8 @@
+# Grafo ciclo de 4 nodos con todos los pesos iguales -> múltiples MST posibles
+4
+0 1 1
+1 2 1
+2 3 1
+3 0 1
+# diagonal opción para variar
+0 2 1

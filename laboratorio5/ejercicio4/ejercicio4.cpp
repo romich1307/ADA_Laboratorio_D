@@ -255,14 +255,14 @@ int main() {
     
     cout << "Probando diferentes tamanos de grafos...\n\n";
     cout << setw(8) << "Vertices" 
-         << setw(15) << "Floyd-W (us)" 
-         << setw(15) << "Dijkstra (us)" 
-         << setw(15) << "Bellman-F (us)" << "\n";
+            << setw(15) << "Floyd-W (us)" 
+            << setw(15) << "Dijkstra (us)" 
+            << setw(15) << "Bellman-F (us)" << "\n";
     cout << string(60, '-') << "\n";
     
     for (int n : tamanos) {
         Grafo g(n);
-        g.generarAleatorio(0.3); // 30% de densidad
+        g.generarAleatorio(0.3); 
         
         // Medir Floyd-Warshall
         auto [tiempo_floyd, resultado_floyd] = floydWarshall(g);
@@ -275,7 +275,5 @@ int main() {
         
         mostrarComparacion(n, tiempo_floyd, tiempo_dijkstra, tiempo_bellman);
     }
-
-
     return 0;
 }
